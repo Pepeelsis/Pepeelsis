@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambio de Color Aleatorio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        h1 {
+            font-size: 48px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Presiona una letra</h1>
+
+    <script>
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key.length === 1 && event.key.match(/[a-zA-Z]/)) {
+                document.body.style.backgroundColor = getRandomColor();
+            }
+        });
+    </script>
+
+</body>
+</html>
