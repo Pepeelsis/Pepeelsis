@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Competencia</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #gameArea {
+            position: relative;
+            width: 200px;
+            height: 500px;
+            border: 1px solid black;
+            overflow: hidden;
+            background-color: white;
+        }
+        .circle {
+            position: absolute;
+            bottom: 0;
+            left: 20px;
+            width: 30px;
+            height: 30px;
+            background-color: blue;
+            border-radius: 50%;
+        }
+        .rectangle {
+            position: absolute;
+            bottom: 0;
+            left: 70px;
+            width: 30px;
+            background-color: red;
+        }
+        .line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: black;
+        }
+        #menu {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+<div id="menu">
+    <select id="level">
+        <option value="1">Fácil</option>
+        <option value="2">Medio</option>
+        <option value="3">Difícil</option>
+        <option value="4">Experto</option>
+    </select>
+</div>
+<div id="gameArea">
+    <div class="line"></div>
+    <div class="circle"></div>
+    <div class="rectangle"></div>
+</div>
+
+<script>
+    const circle = document.querySelector('.circle');
+    const rectangle = document.querySelector('.rectangle');
+    const levelSelector = document.getElementById('level');
+    let playerPosition = 0;
+    let computerPosition = 0;
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === ' ') {
+            // Añadir un rectángulo al círculo
+            playerPosition += 20;
+            circle.style.bottom = playerPosition + 'px';
+            checkWinner();
+        }
+    });
+
+    function computerMove() {
+        const level = parseInt(levelSelector.value);
+        const move = Math.floor(Math.random() * (10 * level));
+        computerPosition += move;
+        rectangle.style.bottom = computerPosition + 'px';
+        checkWinner();
+    }
+
+    function checkWinner() {
+        if (playerPosition >= 470) {
+            alert('¡Ganaste!');
+            resetGame();
+        } else if (computerPosition >= 470) {
+            alert('¡Ganó la computadora!');
+            resetGame();
+        }
+    }
+
+    function resetGame() {
+        playerPosition = 0;
+        computerPosition = 0;
+        circle.style.bottom = '0px';
+        rectangle.style.bottom = '0px';
+    }
+
+    setInterval(computerMove, 1000);
+</script>
+
+</body>
+</html>
