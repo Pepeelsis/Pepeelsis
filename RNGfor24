@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Números Aleatorios</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        #contador {
+            font-size: 30px;
+            margin: 20px;
+        }
+        #numero {
+            font-size: 50px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Generador de Números Aleatorios</h1>
+    <p id="contador"></p>
+    <p id="numero">Esperando...</p>
+
+    <script>
+        // Configuración del tiempo en milisegundos para 24 horas
+        const tiempoLimite = 24 * 60 * 60 * 1000; // 24 horas en milisegundos
+        const tiempoDeContador = 1000; // Cada 1 segundo se actualiza el contador
+        
+        // Revisa si hay un tiempo restante guardado en el localStorage
+        let tiempoRestante = localStorage.getItem('tiempoRestante');
+        let ultimoNumero = localStorage.getItem('ultimoNumero');
+        
+        if (!tiempoRestante) {
+            // Si no hay tiempo restante, establecerlo a 24 horas
+            tiempoRestante = tiempoLimite;
+            localStorage.setItem('tiempoRestante', tiempoRestante);
+        }
+        
+        // Mostrar el último número si ya ha pasado el tiempo
+        if (ultimoNumero) {
+            document.getElementById('numero').innerText = "Último número: " + ultimoNumero;
+        }
+
+        // Función para generar un número aleatorio entre 1 y 100000
+        function generarNumeroAleatorio() {
+            return Math.floor(Math.random() * 100000) + 1;
+        }
+
+        // Actualizar el contador y verificar el tiempo restante
+        function actualizarContador() {
+            if (tiempoRestante <= 0) {
+                // Si el tiempo ha llegado a 0, mostrar el último número generado
+                localStorage.setItem('ultimoNumero', generarNumeroAleatorio());
+                document.getElementById('numero').innerText = "Último número: " + localStorage.getItem('ultimoNumero');
+                clearInterval(intervaloContador);
+            } else {
+                // Si aún hay tiempo, actualizar el contador y generar un nuevo número
+                let horas = Math.floor(tiempoRestante / (1000 * 60 * 60));
+                let minutos = Math.floor((tiempoRestante % (1000 * 60 * 60)) / (1000 * 60));
+                let segundos = Math.floor((tiempoRestante % (1000 * 60)) / 1000);
+                document.getElementById('contador').innerText = `Tiempo restante: ${horas}:${minutos}:${segundos}`;
+                document.getElementById('numero').innerText = generarNumeroAleatorio();
+                tiempoRestante -= tiempoDeContador;
+                localStorage.setItem('tiempoRestante', tiempoRestante);
+            }
+        }
+
+        // Intervalo para actualizar el contador cada segundo
+        const intervaloContador = setInterval(actualizarContador, tiempoDeContador);
+    </script>
+</body>
+</html>
